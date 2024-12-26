@@ -6,12 +6,15 @@ module Fastlane
     class SqCiPrepareIosAction < Action
       def self.run(params)
         keychain_path = "~/Library/Keychains/#{params[:keychain_name]}-db"
-        other_action.create_keychain(
-          default_keychain: false,
-          lock_when_sleeps: true,
-          name: params[:keychain_name],
-          password: params[:keychain_password]
-        )
+
+        if `find ~/Library/Keychains -type f -print | grep '#{params[:keychain_name]}'`.strip.empty?
+          other_action.create_keychain(
+            default_keychain: false,
+            lock_when_sleeps: false,
+            name: params[:keychain_name],
+            password: params[:keychain_password]
+          )
+        end
 
         other_action.unlock_keychain(
           path: keychain_path,
