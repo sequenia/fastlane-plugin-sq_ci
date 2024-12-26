@@ -6,7 +6,7 @@ module Fastlane
     class SqCiAddVersionTagAction < Action
       def self.run(params)
         app_version_string = other_action.sq_ci_get_app_version_string(
-          target: params[:main_target]
+          main_target: params[:main_target]
         )
 
         other_action.git_pull
