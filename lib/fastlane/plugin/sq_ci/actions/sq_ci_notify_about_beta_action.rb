@@ -5,7 +5,9 @@ module Fastlane
   module Actions
     class SqCiNotifyAboutBetaAction < Action
       def self.run(params)
-        app_version_string = other_action.sq_ci_get_app_version_string
+        app_version_string = other_action.sq_ci_get_app_version_string(
+          main_target: params[:main_target]
+        )
 
         message = Helper::SqCiHelper.new_beta_version_message(
           app_name: params[:app_name],
@@ -29,7 +31,7 @@ module Fastlane
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(
-            key: :target,
+            key: :main_target,
             description: 'Name of main target',
             optional: false,
             type: String

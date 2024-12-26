@@ -7,7 +7,7 @@ module Fastlane
       def self.run(params)
         version_number = other_action.get_version_number(
           xcodeproj: params[:project_path],
-          target: params[:main_target]
+          main_target: params[:main_target]
         )
 
         build_number = other_action.get_build_number(
