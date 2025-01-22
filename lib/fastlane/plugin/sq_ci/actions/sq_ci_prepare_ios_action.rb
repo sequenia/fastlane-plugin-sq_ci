@@ -17,8 +17,7 @@ module Fastlane
 
         other_action.unlock_keychain(
           path: keychain_path,
-          password: params[:keychain_password],
-          set_default: true
+          password: params[:keychain_password]
         )
 
         other_action.app_store_connect_api_key(
