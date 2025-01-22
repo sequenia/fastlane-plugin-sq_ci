@@ -18,7 +18,13 @@ module Fastlane
         )
 
         params[:targets].each do |target, app_identifier|
+          Helper::SqCiHelper.add_target_attributes(
+            target_name: target,
+            project_path: params[:project_path]
+          )
+
           other_action.update_code_signing_settings(
+            use_automatic_signing: false,
             path: params[:project_path],
             bundle_identifier: app_identifier,
             profile_name: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING][app_identifier],
