@@ -11,7 +11,7 @@ module Fastlane
           other_action.create_keychain(
             default_keychain: false,
             lock_when_sleeps: false,
-            path: keychain_path,
+            name: params[:keychain_name],
             password: params[:keychain_password],
             add_to_search_list: true
           )
