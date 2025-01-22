@@ -14,7 +14,8 @@ module Fastlane
           skip_confirmation: true,
           app_identifier: params[:targets].map { |_, app_id| app_id },
           force: false,
-          verbose: true
+          verbose: true,
+          generate_apple_certs: false
         )
 
         params[:targets].each do |target, app_identifier|
@@ -107,6 +108,18 @@ module Fastlane
             description: 'Password for certificates and profiles storage',
             optional: false,
             type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :verbose,
+            optional: true,
+            type: Boolean,
+            default_value: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :generate_apple_certs,
+            optional: true,
+            type: Boolean,
+            default_value: true
           )
         ]
       end
