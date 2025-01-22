@@ -11,14 +11,16 @@ module Fastlane
           other_action.create_keychain(
             default_keychain: false,
             lock_when_sleeps: false,
-            name: params[:keychain_name],
-            password: params[:keychain_password]
+            path: keychain_path,
+            password: params[:keychain_password],
+            add_to_search_list: true
           )
         end
 
         other_action.unlock_keychain(
           path: keychain_path,
-          password: params[:keychain_password]
+          password: params[:keychain_password],
+          add_to_search_list: true
         )
 
         other_action.app_store_connect_api_key(
