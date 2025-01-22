@@ -9,7 +9,7 @@ module Fastlane
 
         if `find ~/Library/Keychains -type f -print | grep '#{params[:keychain_name]}'`.strip.empty?
           other_action.create_keychain(
-            default_keychain: false,
+            default_keychain: true,
             lock_when_sleeps: false,
             name: params[:keychain_name],
             password: params[:keychain_password],
@@ -20,7 +20,8 @@ module Fastlane
         other_action.unlock_keychain(
           path: keychain_path,
           password: params[:keychain_password],
-          add_to_search_list: true
+          add_to_search_list: true,
+          set_default: true
         )
 
         other_action.app_store_connect_api_key(
