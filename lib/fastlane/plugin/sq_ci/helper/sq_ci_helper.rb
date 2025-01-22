@@ -22,6 +22,10 @@ module Fastlane
         project.targets.each do |target|
           next unless target.name == target_name
 
+          if project.root_object.attributes['TargetAttributes'].nil?
+            project.root_object.attributes['TargetAttributes'] = {}
+          end
+
           target_attributes = project.root_object.attributes['TargetAttributes']
           target_attributes[target.uuid] = { "CreatedOnToolsVersion" => "9.4.1" }
         end
