@@ -22,9 +22,8 @@ module Fastlane
         project.targets.each do |target|
           next unless target.name == target_name
 
-          created_on_tools_version = { "CreatedOnToolsVersion" => "9.4.1" }
           target_attributes = project.root_object.attributes['TargetAttributes']
-          target_attributes[target.uuid] = system_capabilities.merge(created_on_tools_version)
+          target_attributes[target.uuid] = { "CreatedOnToolsVersion" => "9.4.1" }
         end
 
         project.save
