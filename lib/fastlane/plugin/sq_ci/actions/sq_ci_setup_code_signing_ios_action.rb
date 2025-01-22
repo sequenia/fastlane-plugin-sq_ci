@@ -14,8 +14,8 @@ module Fastlane
           skip_confirmation: true,
           app_identifier: params[:targets].map { |_, app_id| app_id },
           force: false,
-          verbose: true,
-          generate_apple_certs: false
+          verbose: params[:verbose],
+          generate_apple_certs: params[:generate_apple_certs]
         )
 
         params[:targets].each do |target, app_identifier|
