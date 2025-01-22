@@ -94,15 +94,15 @@ module Fastlane
             env_name: 'SQ_CI_CERTIFICATES_REPO',
             description: 'Repository for store certificates and profiles',
             optional: false,
-            type: String,
+            type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :certificates_password,
             env_name: 'SQ_CI_CERTIFICATES_PASSWORD',
             description: 'Password for certificates and profiles storage',
             optional: false,
-            type: String,
-          ),
+            type: String
+          )
         ]
       end
 
