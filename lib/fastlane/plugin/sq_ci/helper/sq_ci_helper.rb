@@ -16,6 +16,15 @@ module Fastlane
         message
       end
 
+      def self.new_release_candidate_message(app_name:, app_version_string:, installation_link:)
+        message = "Коллеги, предрелизная сборка приложения '#{app_name}' #{app_version_string} готова к тестированию!"
+        if !installation_link.nil? && installation_link != ''
+          message = "#{message}\n\nСсылка на установку: #{installation_link}"
+        end
+
+        message
+      end
+
       def self.add_target_attributes(target_name:, project_path:)
         project = Xcodeproj::Project.open(project_path)
 
