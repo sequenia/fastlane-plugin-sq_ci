@@ -12,6 +12,7 @@ module Fastlane
         )
 
         ENV['MATCH_PASSWORD'] = params[:certificates_password]
+        ENV['CER_KEYCHAIN_PATH'] = keychain_path
         other_action.sync_code_signing(
           type: params[:code_signing_type],
           git_url: params[:certificates_repo],
