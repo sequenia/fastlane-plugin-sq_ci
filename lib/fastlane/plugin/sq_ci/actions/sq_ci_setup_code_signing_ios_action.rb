@@ -5,6 +5,12 @@ module Fastlane
   module Actions
     class SqCiSetupCodeSigningIosAction < Action
       def self.run(params)
+        keychain_path = "~/Library/Keychains/#{params[:keychain_name]}-db"
+        other_action.unlock_keychain(
+          path: keychain_path,
+          password: params[:keychain_password]
+        )
+
         ENV['MATCH_PASSWORD'] = params[:certificates_password]
         other_action.sync_code_signing(
           type: params[:code_signing_type],
