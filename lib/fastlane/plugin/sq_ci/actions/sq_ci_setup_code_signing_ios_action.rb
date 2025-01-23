@@ -20,7 +20,7 @@ module Fastlane
           keychain_password: params[:keychain_password],
           skip_confirmation: true,
           app_identifier: params[:targets].map { |_, app_id| app_id },
-          force: false,
+          force: true,
           verbose: params[:verbose],
           generate_apple_certs: params[:generate_apple_certs]
         )
