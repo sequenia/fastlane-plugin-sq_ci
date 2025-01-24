@@ -32,14 +32,14 @@ module Fastlane
           FastlaneCore::ConfigItem.new(
             key: :firebase_config_file,
             description: 'Path to firebase config file',
-            env_name: SQ_CI_FIREBASE_CONFIG_FILE,
+            env_name: 'SQ_CI_FIREBASE_CONFIG_FILE',
             optional: true,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :upload_dsyms_binary_path,
             description: 'Path to upload-dsyms binary',
-            env_name: SQ_CI_UPLOAD_DSYMS_BINARY_PATH,
+            env_name: 'SQ_CI_UPLOAD_DSYMS_BINARY_PATH',
             optional: true,
             type: String
           )
