@@ -11,6 +11,7 @@ module Fastlane
 
         other_action.build_app(
           project: params[:project_path],
+          workspace: params[:workspace_path],
           clean: params[:should_clear_project],
           scheme: params[:target_scheme],
           export_method: params[:export_method],
@@ -82,7 +83,14 @@ module Fastlane
             key: :project_path,
             env_name: 'SQ_CI_PROJECT_PATH',
             description: 'Path to project',
-            optional: false,
+            optional: true,
+            type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :workspace_path,
+            env_name: 'SQ_CI_WORKSPACE_PATH',
+            description: 'Path to workspace',
+            optional: true,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
