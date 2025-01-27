@@ -12,9 +12,9 @@ module Fastlane
         ENV['FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT'] = "300"
         ENV['FASTLANE_XCODE_LIST_TIMEOUT'] = "300"
 
-        if workspace_path.nil? && workspace_path != ''
+        if !workspace_path.nil? && workspace_path != ''
           ENV['GYM_WORKSPACE'] = workspace_path
-        elsif project_path.nil? && project_path != ''
+        elsif !project_path.nil? && project_path != ''
           ENV['GYM_PROJECT'] = project_path
         end
 
