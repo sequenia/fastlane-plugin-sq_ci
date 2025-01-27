@@ -5,13 +5,16 @@ module Fastlane
   module Actions
     class SqCiDistributeBetaIosAction < Action
       def self.run(params)
+        project_path = params[:project_path]
+        workspace_path = params[:workspace_path]
+
         ENV['FASTLANE_XCODEBUILD_SETTINGS_RETRIES'] = "10"
         ENV['FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT'] = "300"
         ENV['FASTLANE_XCODE_LIST_TIMEOUT'] = "300"
+        ENV['GYM_PROJECT'] = project_path if project_path.nil? && project_path != ''
+        ENV['GYM_WORKSPACE'] = workspace_path if workspace_path.nil? && workspace_path != ''
 
         other_action.build_app(
-          project: params[:project_path],
-          workspace: params[:workspace_path],
           clean: params[:should_clear_project],
           scheme: params[:target_scheme],
           export_method: params[:export_method],
