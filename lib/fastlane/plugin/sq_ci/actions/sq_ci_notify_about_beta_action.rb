@@ -49,13 +49,6 @@ module Fastlane
             type: String
           ),
           FastlaneCore::ConfigItem.new(
-            key: :should_show_platform,
-            description: 'Should show platform in message',
-            optional: true,
-            type: Boolean,
-            default_value: false
-          ),
-          FastlaneCore::ConfigItem.new(
             key: :project_path,
             env_name: 'SQ_CI_PROJECT_PATH',
             description: 'Path to project',

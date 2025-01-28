@@ -5,6 +5,8 @@ module Fastlane
   module Actions
     class SqCiGetAppVersionStringAction < Action
       def self.run(params)
+        # platform = lane_context[SharedValues::PLATFORM_NAME] || lane_context[SharedValues::DEFAULT_PLATFORM]
+        # if platform == :ios
         version_number = other_action.get_version_number(
           xcodeproj: params[:project_path],
           target: params[:main_target]
@@ -13,8 +15,10 @@ module Fastlane
         build_number = other_action.get_build_number(
           xcodeproj: params[:project_path]
         )
-
         "#{version_number}(#{build_number})"
+        # end
+
+        # ""
       end
 
       def self.description

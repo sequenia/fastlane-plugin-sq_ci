@@ -24,7 +24,7 @@ module Fastlane
         )
 
         # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html#put_object-instance_method
-        put_object_result = s3_client.put_object(
+        s3_client.put_object(
           acl: 'public-read',
           body: File.open(file_path),
           bucket: bucket_name,
@@ -34,9 +34,8 @@ module Fastlane
 
         uploaded_object = Aws::S3::Object.new(bucket_name, file_key, client: s3_client)
         public_url = uploaded_object.public_url
-        puts(put_object_result)
-        puts(uploaded_object)
-        puts(public_url)
+
+        return public_url
       end
 
       def self.description
@@ -100,8 +99,12 @@ module Fastlane
         ]
       end
 
+      def self.return_type
+        :string
+      end
+
       def self.return_value
-        ''
+        'Link for download file'
       end
 
       def self.authors
