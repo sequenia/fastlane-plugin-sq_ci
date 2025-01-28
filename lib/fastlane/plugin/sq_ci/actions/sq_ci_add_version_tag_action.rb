@@ -5,9 +5,7 @@ module Fastlane
   module Actions
     class SqCiAddVersionTagAction < Action
       def self.run(params)
-        app_version_string = other_action.sq_ci_get_app_version_string(
-          main_target: params[:main_target]
-        )
+        app_version_string = other_action.sq_ci_get_app_version_string
 
         other_action.git_pull
 
@@ -33,20 +31,6 @@ module Fastlane
           FastlaneCore::ConfigItem.new(
             key: :tags_folder,
             description: 'Name of folder of tag in repo',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :main_target,
-            description: 'Name of main target',
-            env_name: 'SQ_CI_MAIN_TARGET',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :project_path,
-            env_name: 'SQ_CI_PROJECT_PATH',
-            description: 'Path to project',
             optional: false,
             type: String
           )

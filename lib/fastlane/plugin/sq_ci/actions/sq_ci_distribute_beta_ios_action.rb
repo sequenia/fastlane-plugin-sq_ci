@@ -31,7 +31,7 @@ module Fastlane
         other_action.upload_to_testflight(
           notify_external_testers: testflight_testers_groups_is_exist,
           distribute_external: testflight_testers_groups_is_exist,
-          groups: testflight_testers_groups,
+          groups: testflight_testers_groups.split(","),
           demo_account_required: params[:demo_account_required],
           beta_app_review_info: params[:beta_app_review_info],
           localized_app_info: params[:localized_app_info],
@@ -82,7 +82,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(
             key: :testflight_testers_groups,
             env_name: 'SQ_CI_TESTFLIGHT_TESTERS_GROUPS',
-            description: 'List of testflight testers groups',
+            description: 'List of testflight testers groups separate with \',\'',
             optional: true,
             type: String
           ),

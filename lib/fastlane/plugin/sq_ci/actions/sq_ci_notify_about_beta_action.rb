@@ -5,14 +5,13 @@ module Fastlane
   module Actions
     class SqCiNotifyAboutBetaAction < Action
       def self.run(params)
-        app_version_string = other_action.sq_ci_get_app_version_string(
-          main_target: params[:main_target]
-        )
+        app_version_string = other_action.sq_ci_get_app_version_string
 
-        message = Helper::SqCiHelper.new_beta_version_message(
+        message = Helper::SqCiHelper.notification_message(
           app_name: params[:app_name],
           app_version_string: app_version_string,
-          installation_link: params[:installation_link]
+          app_type: "beta",
+          installation_links: params[:installation_links]
         )
 
         other_action.sq_ci_send_telegram_message(
@@ -31,29 +30,16 @@ module Fastlane
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(
-            key: :main_target,
-            description: 'Name of main target',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
             key: :app_name,
             description: 'Name of application for notify',
             optional: false,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
-            key: :installation_link,
-            description: 'Link to the app installation',
+            key: :installation_links,
+            description: 'Links to the app installation',
             optional: true,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :project_path,
-            env_name: 'SQ_CI_PROJECT_PATH',
-            description: 'Path to project',
-            optional: false,
-            type: String
+            type: Array
           )
         ]
       end

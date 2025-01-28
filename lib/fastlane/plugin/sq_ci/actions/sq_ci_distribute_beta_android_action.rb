@@ -52,7 +52,8 @@ module Fastlane
           FastlaneCore::ConfigItem.new(
             key: :distribute_type,
             description: 'Type of distribution. Available values: apk, google_play, app_gallery, ru_store',
-            optional: false,
+            optional: true,
+            default_value: "apk",
             type: String
           )
         ]
