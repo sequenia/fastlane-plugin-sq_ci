@@ -6,6 +6,7 @@ module Fastlane
     class SqCiGetAppVersionStringAction < Action
       def self.run(params)
         platform = lane_context[SharedValues::PLATFORM_NAME] || lane_context[SharedValues::DEFAULT_PLATFORM]
+        should_show_build_number = params[:should_show_build_number]
         if platform == :ios
           version_number = other_action.get_version_number(
             xcodeproj: params[:project_path],
@@ -15,12 +16,13 @@ module Fastlane
           build_number = other_action.get_build_number(
             xcodeproj: params[:project_path]
           )
-          "#{version_number}(#{build_number})"
+
+          should_show_build_number ? "#{version_number}(#{build_number})" : version_number
         elsif platform == :android
           gradle_file_path = Helper::SqCiHelper.get_gradle_file_path(params[:gradle_file_path])
           version_name = Helper::SqCiHelper.read_key_from_gradle_file(gradle_file_path, "versionName")
           version_code = Helper::SqCiHelper.read_key_from_gradle_file(gradle_file_path, "versionCode")
-          "#{version_name}(#{version_code})"
+          should_show_build_number ? "#{version_name}(#{version_code})" : version_name
         else
           UI.user_error!("Platform not specified!")
         end
@@ -36,6 +38,13 @@ module Fastlane
 
       def self.available_options
         [
+          FastlaneCore::ConfigItem.new(
+            key: :should_show_build_number,
+            description: 'Should add build number into version number',
+            optional: true,
+            default_value: true
+            type: Boolean
+          ),
           FastlaneCore::ConfigItem.new(
             key: :main_target,
             description: 'Name of main target',

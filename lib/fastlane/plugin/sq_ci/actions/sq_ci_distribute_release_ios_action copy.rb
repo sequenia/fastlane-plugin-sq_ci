@@ -25,7 +25,9 @@ module Fastlane
           xcargs: params[:build_args]
         )
 
-        app_version_string = other_action.sq_ci_get_app_version_string
+        app_version_string = other_action.sq_ci_get_app_version_string(
+          should_show_build_number: false
+        )
 
         other_action.upload_to_app_store(
           submit_for_review: true,
