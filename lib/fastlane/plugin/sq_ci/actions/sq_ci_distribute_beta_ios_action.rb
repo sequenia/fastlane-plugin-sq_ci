@@ -26,7 +26,7 @@ module Fastlane
         )
 
         testflight_testers_groups = params[:testflight_testers_groups]
-        testflight_testers_groups_is_exist = testflight_testers_groups.nil? && testflight_testers_groups != ''
+        testflight_testers_groups_is_exist = !testflight_testers_groups.nil? && testflight_testers_groups != ''
 
         other_action.upload_to_testflight(
           notify_external_testers: testflight_testers_groups_is_exist,
