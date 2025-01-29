@@ -42,7 +42,7 @@ module Fastlane
             key: :should_show_build_number,
             description: 'Should add build number into version number',
             optional: true,
-            default_value: true
+            default_value: true,
             type: Boolean
           ),
           FastlaneCore::ConfigItem.new(
