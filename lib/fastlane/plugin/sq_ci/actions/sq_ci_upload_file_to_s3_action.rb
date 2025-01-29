@@ -14,7 +14,7 @@ module Fastlane
 
         file_path = params[:file_path]
         file_expire_at = Time.at(Time.now.to_i + params[:file_expire_at])
-        file_key = "#{File.basename(file_path, '.*')}-#{Time.now.to_i}#{File.extname(file_path)}"
+        file_key = "#{File.basename(file_path, '.*')}#{File.extname(file_path)}"
 
         credentials = Aws::Credentials.new(access_key, key_secret)
         s3_client = Aws::S3::Client.new(
