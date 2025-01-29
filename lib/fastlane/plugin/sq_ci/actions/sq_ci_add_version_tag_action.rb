@@ -7,8 +7,6 @@ module Fastlane
       def self.run(params)
         app_version_string = other_action.sq_ci_get_app_version_string
 
-        other_action.git_pull
-
         other_action.add_git_tag(
           tag: "#{params[:tags_folder]}/#{app_version_string}"
         )
