@@ -106,7 +106,7 @@ module Fastlane
             description: 'Export method for build',
             optional: true,
             type: String,
-            default_value: "app-store-connect"
+            default_value: "app-store"
           ),
           FastlaneCore::ConfigItem.new(
             key: :build_args,
