@@ -10,7 +10,8 @@ module Fastlane
         message = Helper::SqCiHelper.notification_message(
           app_name: params[:app_name],
           app_version_string: app_version_string,
-          app_type: "release"
+          app_type: "release",
+          installation_links: []
         )
 
         other_action.sq_ci_send_telegram_message(
