@@ -7,6 +7,7 @@ module Fastlane
       def self.run(params)
         project_path = params[:project_path]
         workspace_path = params[:workspace_path]
+        derived_data_path = params[:derived_data_path]
 
         ENV['FASTLANE_XCODEBUILD_SETTINGS_RETRIES'] = "10"
         ENV['FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT'] = "300"
@@ -16,6 +17,10 @@ module Fastlane
           ENV['GYM_WORKSPACE'] = workspace_path
         elsif !project_path.nil? && project_path != ''
           ENV['GYM_PROJECT'] = project_path
+        end
+
+        if !derived_data_path.nil? && derived_data_path != ''
+          ENV['GYM_DERIVED_DATA_PATH'] = project_path
         end
 
         other_action.build_app(
@@ -123,7 +128,14 @@ module Fastlane
             optional: true,
             type: Boolean,
             default_value: true
-          )
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :derived_data_path,
+            env_name: 'SQ_CI_DERIVED_DATA_PATH',
+            description: 'Path to derived data folder',
+            optional: true,
+            type: String
+          ),
         ]
       end
 
