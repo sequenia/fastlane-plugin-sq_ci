@@ -141,7 +141,7 @@ module Fastlane
             key: :skip_package_dependencies_resolution,
             description: 'Should skip packages resolving',
             optional: true,
-            type: String,
+            type: Boolean,
             default_value: false
           )
         ]
