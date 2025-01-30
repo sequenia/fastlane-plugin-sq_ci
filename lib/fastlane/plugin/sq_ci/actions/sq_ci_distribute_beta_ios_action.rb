@@ -27,7 +27,8 @@ module Fastlane
           clean: params[:should_clear_project],
           scheme: params[:target_scheme],
           export_method: params[:export_method],
-          xcargs: params[:build_args]
+          xcargs: params[:build_args],
+          skip_package_dependencies_resolution: params[:skip_package_dependencies_resolution]
         )
 
         testflight_testers_groups = params[:testflight_testers_groups]
@@ -135,7 +136,14 @@ module Fastlane
             description: 'Path to derived data folder',
             optional: true,
             type: String
-          ),
+          )
+          FastlaneCore::ConfigItem.new(
+            key: :skip_package_dependencies_resolution,
+            description: 'Should skip packages resolving',
+            optional: true,
+            type: String,
+            default_value: false
+          )
         ]
       end
 
