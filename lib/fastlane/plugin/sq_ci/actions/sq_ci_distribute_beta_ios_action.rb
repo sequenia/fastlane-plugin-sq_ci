@@ -20,7 +20,7 @@ module Fastlane
         end
 
         if !derived_data_path.nil? && derived_data_path != ''
-          ENV['GYM_DERIVED_DATA_PATH'] = project_path
+          ENV['GYM_DERIVED_DATA_PATH'] = derived_data_path
         end
 
         other_action.build_app(
