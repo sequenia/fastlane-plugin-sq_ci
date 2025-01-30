@@ -136,7 +136,7 @@ module Fastlane
             description: 'Path to derived data folder',
             optional: true,
             type: String
-          )
+          ),
           FastlaneCore::ConfigItem.new(
             key: :skip_package_dependencies_resolution,
             description: 'Should skip packages resolving',
