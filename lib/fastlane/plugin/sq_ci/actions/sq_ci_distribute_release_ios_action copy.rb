@@ -18,11 +18,16 @@ module Fastlane
           ENV['GYM_PROJECT'] = project_path
         end
 
+        if !derived_data_path.nil? && derived_data_path != ''
+          ENV['GYM_DERIVED_DATA_PATH'] = derived_data_path
+        end
+
         other_action.build_app(
           clean: params[:should_clear_project],
           scheme: params[:target_scheme],
           export_method: params[:export_method],
-          xcargs: params[:build_args]
+          xcargs: params[:build_args],
+          skip_package_dependencies_resolution: params[:skip_package_dependencies_resolution]
         )
 
         app_version_string = other_action.sq_ci_get_app_version_string(
@@ -100,6 +105,20 @@ module Fastlane
             optional: true,
             type: Boolean,
             default_value: true
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :derived_data_path,
+            env_name: 'SQ_CI_DERIVED_DATA_PATH',
+            description: 'Path to derived data folder',
+            optional: true,
+            type: String
+          )
+          FastlaneCore::ConfigItem.new(
+            key: :skip_package_dependencies_resolution,
+            description: 'Should skip packages resolving',
+            optional: true,
+            type: String,
+            default_value: false
           )
         ]
       end
