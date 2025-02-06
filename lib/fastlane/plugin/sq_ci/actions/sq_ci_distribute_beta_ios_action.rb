@@ -120,7 +120,7 @@ module Fastlane
             description: 'Additional args for project build',
             optional: true,
             type: String,
-            default_value: "-skipPackagePluginValidation -skipMacroValidation -allowProvisioningUpdates"
+            default_value: "-skipPackagePluginValidation -skipMacroValidation"
           ),
           FastlaneCore::ConfigItem.new(
             key: :should_clear_project,
