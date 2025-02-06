@@ -11,7 +11,7 @@ module Fastlane
           app_name: params[:app_name],
           app_version_string: app_version_string,
           app_type: "rc",
-          installation_links: params[:installation_links]
+          links: params[:links] || params[:installation_links]
         )
 
         other_action.sq_ci_send_telegram_message(
@@ -36,8 +36,14 @@ module Fastlane
             type: String
           ),
           FastlaneCore::ConfigItem.new(
-            key: :installation_links,
+            key: :links,
             description: 'Links to the app installation',
+            optional: true,
+            type: Array
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :installation_links,
+            description: '(DEPRECATED!, user: links instead) Links to the app installation',
             optional: true,
             type: Array
           )

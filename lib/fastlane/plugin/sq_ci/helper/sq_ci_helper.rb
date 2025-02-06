@@ -13,7 +13,7 @@ module Fastlane
     class SqCiHelper
       GRADLE_FILE_TEST = "/tmp/fastlane/tests/versioning/app/build.gradle"
 
-      def self.notification_message(app_name:, app_version_string:, app_type:, installation_links:)
+      def self.notification_message(app_name:, app_version_string:, app_type:, links:)
         if app_type == "beta"
           message = "Коллеги, сборка приложения '#{app_name}' #{app_version_string} готова к тестированию!"
         elsif app_type == "rc"
@@ -24,9 +24,9 @@ module Fastlane
           return ""
         end
 
-        return message if installation_links.nil? || installation_links.length == 0
+        return message if links.nil? || links.length == 0
 
-        links_message = installation_links
+        links_message = links
                         .select { |link| !link[:url].nil? }
                         .map { |link| "#{link[:name] || 'Ссылка на установку'}: #{link[:url]}" }
                         .join("\n\n")
