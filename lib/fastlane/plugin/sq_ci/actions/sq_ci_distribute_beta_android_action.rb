@@ -16,9 +16,11 @@ module Fastlane
           project_dir: project_folder
         )
 
-        other_action.sq_ci_upload_file_to_s3(
-          file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
-        )
+        if params[:should_upload_apk]
+          other_action.sq_ci_upload_file_to_s3(
+            file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+          )
+        end
       end
 
       def self.description
@@ -55,6 +57,13 @@ module Fastlane
             optional: true,
             default_value: "apk",
             type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :should_upload_apk,
+            description: 'Should upload apk to s3 storage',
+            optional: true,
+            default_value: true,
+            type: Boolean
           )
         ]
       end
