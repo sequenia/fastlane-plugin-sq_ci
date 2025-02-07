@@ -5,6 +5,7 @@ module Fastlane
   module Actions
     class SqCiNotifyAction < Action
       def self.run(params)
+        message = params[:message]
         links_message = params[:links]
                         .select { |link| !link[:url].nil? }
                         .map { |link| "#{link[:name] || 'Ссылка'}: #{link[:url]}" }
