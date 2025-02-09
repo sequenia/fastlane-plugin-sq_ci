@@ -1,5 +1,6 @@
 require 'fastlane/action'
 require_relative '../helper/sq_ci_helper'
+require_relative '../../../../sq_ci/s3/options'
 require 'aws-sdk-core'
 
 module Fastlane
@@ -13,7 +14,6 @@ module Fastlane
         endpoint = params[:s3_endpoint]
 
         file_path = params[:file_path]
-        file_expire_at = Time.at(Time.now.to_i + params[:file_expire_at])
         file_key = "#{File.basename(file_path, '.*')}#{File.extname(file_path)}"
 
         credentials = Aws::Credentials.new(access_key, key_secret)
@@ -28,8 +28,7 @@ module Fastlane
           acl: 'public-read',
           body: File.open(file_path),
           bucket: bucket_name,
-          key: file_key,
-          expires: file_expire_at
+          key: file_key
         )
 
         uploaded_object = Aws::S3::Object.new(bucket_name, file_key, client: s3_client)
@@ -47,56 +46,7 @@ module Fastlane
       end
 
       def self.available_options
-        [
-          FastlaneCore::ConfigItem.new(
-            key: :file_path,
-            description: 'Path to uploaded file',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :s3_access_key_id,
-            env_name: 'SQ_CI_S3_ACCESS_KEY_ID',
-            description: 'Identifier for S3 access key',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :s3_secret_access_key,
-            env_name: 'SQ_CI_S3_SECRET_ACCESS_KEY',
-            description: 'Secret for S3 access key',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :s3_region_name,
-            env_name: 'SQ_CI_S3_REGION_NAME',
-            description: 'Region name of S3 storage',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :s3_bucket_name,
-            env_name: 'SQ_CI_S3_BUCKET_NAME',
-            description: 'S3\'s bucket name',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :s3_endpoint,
-            env_name: 'SQ_CI_S3_ENDPOINT',
-            description: 'Endpoint for S3 storage',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :file_expire_at,
-            description: 'Expire at for uploaded to S3 storage files',
-            optional: true,
-            type: Integer,
-            default_value: 7_776_000
-          )
-        ]
+        ::SqCi::S3::Options.options
       end
 
       def self.return_type
@@ -104,7 +54,7 @@ module Fastlane
       end
 
       def self.return_value
-        'Link for download file'
+        'Link for uploaded file'
       end
 
       def self.authors

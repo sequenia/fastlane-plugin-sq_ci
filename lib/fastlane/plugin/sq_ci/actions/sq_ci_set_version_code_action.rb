@@ -1,9 +1,10 @@
 require 'fastlane/action'
 require_relative '../helper/sq_ci_helper'
+require_relative '../../../../sq_ci/android_app/options'
 
 module Fastlane
   module Actions
-    class SqCiSetVersionCodeAndroidAction < Action
+    class SqCiSetVersionCodeAction < Action
       def self.run(params)
         gradle_file_path = Helper::SqCiHelper.get_gradle_file_path(params[:gradle_file_path])
         new_version_code = Helper::SqCiHelper.get_new_version_code(gradle_file_path, params[:version_code])
@@ -12,7 +13,7 @@ module Fastlane
       end
 
       def self.description
-        'Get string with current app version'
+        'Set version code for Android application'
       end
 
       def self.details
@@ -26,30 +27,9 @@ module Fastlane
             description: 'Version code to set',
             optional: false,
             type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :main_target,
-            description: 'Name of main target',
-            env_name: 'SQ_CI_MAIN_TARGET',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :project_path,
-            env_name: 'SQ_CI_PROJECT_PATH',
-            description: 'Path to project',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :gradle_file_path,
-            env_name: 'SQ_CI_GRADLE_FILE_PATH',
-            description: 'Path to build.gradle file',
-            default_value: "app/build.gradle",
-            optional: true,
-            type: String
           )
-        ]
+        ] +
+          ::SqCi::AndroidApp::Options.options
       end
 
       def self.return_value
