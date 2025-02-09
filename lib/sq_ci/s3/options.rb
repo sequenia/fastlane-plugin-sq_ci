@@ -14,7 +14,7 @@ module SqCi
           ),
           FastlaneCore::ConfigItem.new(
             key: :relative_path,
-            description: 'Folder on s3 storage',
+            description: 'Relative path to file on s3 storage',
             optional: true,
             type: String
           ),
