@@ -14,7 +14,8 @@ module Fastlane
         endpoint = params[:s3_endpoint]
 
         file_path = params[:file_path]
-        file_key = "#{File.basename(file_path, '.*')}#{File.extname(file_path)}"
+        filename = File.basename(file_path)
+        file_key = [params[:relative_path], filename].compact.reject(&:empty?).join("/")
 
         credentials = Aws::Credentials.new(access_key, key_secret)
         s3_client = Aws::S3::Client.new(

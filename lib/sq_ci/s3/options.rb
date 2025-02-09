@@ -8,8 +8,14 @@ module SqCi
         [
           FastlaneCore::ConfigItem.new(
             key: :file_path,
-            description: 'Path to uploaded file',
+            description: 'Path to file for upload',
             optional: false,
+            type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :relative_path,
+            description: 'Folder on s3 storage',
+            optional: true,
             type: String
           ),
           FastlaneCore::ConfigItem.new(

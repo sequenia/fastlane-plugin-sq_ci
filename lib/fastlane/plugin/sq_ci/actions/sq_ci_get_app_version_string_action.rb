@@ -21,7 +21,7 @@ module Fastlane
         elsif platform == :android
           gradle_file_path = Helper::SqCiHelper.get_gradle_file_path(params[:gradle_file_path])
           version_name = Helper::SqCiHelper.read_key_from_gradle_file(gradle_file_path, "versionName")
-          version_code = Helper::SqCiHelper.read_key_from_gradle_file(gradle_file_path, "versionCode")
+          version_code = params[:version_code] || Helper::SqCiHelper.read_key_from_gradle_file(gradle_file_path, "versionCode")
           should_show_build_number ? "#{version_name}(#{version_code})" : version_name
         else
           UI.user_error!("Platform not specified!")
@@ -38,6 +38,12 @@ module Fastlane
 
       def self.available_options
         [
+          FastlaneCore::ConfigItem.new(
+            key: :version_code,
+            description: 'Version code for override local code',
+            optional: true,
+            type: String
+          ),
           FastlaneCore::ConfigItem.new(
             key: :should_show_build_number,
             description: 'Should add build number into version number',
