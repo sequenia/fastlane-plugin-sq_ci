@@ -8,32 +8,23 @@ module Fastlane
   module Actions
     class SqCiUploadAabToGooglePlayAction < Action
       def self.run(params)
-        puts(params)
-
         google_play_client = Supply::Client.make_from_config(
           params: {
             json_key: params[:json_key_file],
             timeout: params[:timeout]
           }
         )
-        puts(google_play_client)
 
-        # build_type = params[:build_type]
-        # flavor = params[:flavor]
-        # project_folder = params[:project_folder]
+        Supply.config = params
 
-        # other_action.gradle(
-        #   task: 'assemble',
-        #   flavor: flavor,
-        #   build_type: build_type,
-        #   project_dir: project_folder
-        # )
+        google_play_client.begin_edit(
+          package_name: params[:package_name]
+        )
 
-        # if params[:should_upload_apk]
-        #   other_action.sq_ci_upload_file_to_s3(
-        #     file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
-        #   )
-        # end
+        google_play_client.upload_bundle(
+          params[:aab_path]
+        )
+        google_play_client.commit_current_edit!
       end
 
       def self.description
@@ -45,7 +36,15 @@ module Fastlane
       end
 
       def self.available_options
-        ::SqCi::GooglePlay::Options.options +
+        [
+          FastlaneCore::ConfigItem.new(
+            key: :aab_path,
+            description: "Path to the aab file",
+            optional: false,
+            type: String
+          )
+        ] +
+          ::SqCi::GooglePlay::Options.options +
           ::SqCi::AndroidApp::Options.options +
           ::SqCi::Shared::Options.options
       end

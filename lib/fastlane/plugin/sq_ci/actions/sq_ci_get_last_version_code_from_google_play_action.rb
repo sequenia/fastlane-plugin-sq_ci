@@ -15,6 +15,8 @@ module Fastlane
           }
         )
 
+        Supply.config = params
+
         google_play_client.begin_edit(
           package_name: params[:package_name]
         )
