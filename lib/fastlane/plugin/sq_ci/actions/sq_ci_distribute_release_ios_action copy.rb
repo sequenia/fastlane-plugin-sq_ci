@@ -7,6 +7,7 @@ module Fastlane
       def self.run(params)
         project_path = params[:project_path]
         workspace_path = params[:workspace_path]
+        derived_data_path = params[:derived_data_path]
 
         ENV['FASTLANE_XCODEBUILD_SETTINGS_RETRIES'] = "10"
         ENV['FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT'] = "300"
@@ -43,7 +44,6 @@ module Fastlane
           app_version: app_version_string,
           precheck_include_in_app_purchases: false
         )
-
       end
 
       def self.description
