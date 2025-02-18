@@ -1,5 +1,7 @@
 require 'fastlane/action'
 require_relative '../helper/sq_ci_helper'
+require_relative '../../../../sq_ci/ios_app/options'
+require_relative '../../../../sq_ci/android_app/options'
 
 module Fastlane
   module Actions
@@ -50,30 +52,10 @@ module Fastlane
             optional: true,
             default_value: true,
             type: Boolean
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :main_target,
-            description: 'Name of main target',
-            env_name: 'SQ_CI_MAIN_TARGET',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :project_path,
-            env_name: 'SQ_CI_PROJECT_PATH',
-            description: 'Path to project',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :gradle_file_path,
-            env_name: 'SQ_CI_GRADLE_FILE_PATH',
-            description: 'Path to build.gradle file',
-            default_value: "app/build.gradle",
-            optional: true,
-            type: String
           )
-        ]
+        ] +
+          ::SqCi::AndroidApp::Options.options +
+          ::SqCi::IosApp::Options.options
       end
 
       def self.return_value

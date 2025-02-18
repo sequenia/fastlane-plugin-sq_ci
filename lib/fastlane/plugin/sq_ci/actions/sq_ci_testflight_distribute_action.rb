@@ -1,9 +1,10 @@
 require 'fastlane/action'
 require_relative '../helper/sq_ci_helper'
+require_relative '../../../../sq_ci/ios_app/options'
 
 module Fastlane
   module Actions
-    class SqCiDistributeReleaseIosAction < Action
+    class SqCiTestflightDistributeAction < Action
       def self.run(params)
         project_path = params[:project_path]
         workspace_path = params[:workspace_path]
@@ -23,6 +24,16 @@ module Fastlane
           ENV['GYM_DERIVED_DATA_PATH'] = derived_data_path
         end
 
+        latest_build_number = other_action.latest_testflight_build_number(
+          initial_build_number: 0
+        )
+
+        other_action.increment_build_number(
+          build_number: latest_build_number + 1,
+          xcodeproj: params[:project_path],
+          skip_info_plist: true
+        )
+
         other_action.build_app(
           clean: params[:should_clear_project],
           scheme: params[:target_scheme],
@@ -31,23 +42,22 @@ module Fastlane
           skip_package_dependencies_resolution: params[:skip_package_dependencies_resolution]
         )
 
-        app_version_string = other_action.sq_ci_get_app_version_string(
-          should_show_build_number: false
-        )
+        testflight_testers_groups = params[:testflight_testers_groups]
+        testflight_testers_groups_is_exist = !testflight_testers_groups.nil? && testflight_testers_groups != ''
 
-        other_action.upload_to_app_store(
-          submit_for_review: true,
-          automatic_release: false,
-          phased_release: true,
-          force: true,
-          skip_screenshots: params[:skip_screenshots],
-          app_version: app_version_string,
-          precheck_include_in_app_purchases: false
+        other_action.upload_to_testflight(
+          notify_external_testers: testflight_testers_groups_is_exist,
+          distribute_external: testflight_testers_groups_is_exist,
+          groups: testflight_testers_groups.split(","),
+          demo_account_required: params[:demo_account_required],
+          beta_app_review_info: params[:beta_app_review_info],
+          localized_app_info: params[:localized_app_info],
+          localized_build_info: params[:localized_build_info]
         )
       end
 
       def self.description
-        'Build and send to review new version of app'
+        'Build and upload build to TestFlight'
       end
 
       def self.details
@@ -63,28 +73,38 @@ module Fastlane
             type: String
           ),
           FastlaneCore::ConfigItem.new(
-            key: :skip_screenshots,
-            description: 'Should skip screenshots',
+            key: :demo_account_required,
+            description: 'Is demo account required for review in Testflight',
             optional: false,
             type: Boolean
           ),
           FastlaneCore::ConfigItem.new(
-            key: :project_path,
-            env_name: 'SQ_CI_PROJECT_PATH',
-            description: 'Path to project',
-            optional: true,
-            type: String
+            key: :beta_app_review_info,
+            description: 'App review info for Testflight',
+            optional: false,
+            type: Object
           ),
           FastlaneCore::ConfigItem.new(
-            key: :workspace_path,
-            env_name: 'SQ_CI_WORKSPACE_PATH',
-            description: 'Path to workspace',
+            key: :localized_app_info,
+            description: 'App info for Testflight',
+            optional: false,
+            type: Object
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :localized_build_info,
+            description: 'Build info for Testflight',
+            optional: false,
+            type: Object
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :testflight_testers_groups,
+            env_name: 'SQ_CI_TESTFLIGHT_TESTERS_GROUPS',
+            description: 'List of testflight testers groups separate with \',\'',
             optional: true,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :export_method,
-            env_name: 'SQ_CI_EXPORT_METHOD',
             description: 'Export method for build',
             optional: true,
             type: String,
@@ -92,26 +112,17 @@ module Fastlane
           ),
           FastlaneCore::ConfigItem.new(
             key: :build_args,
-            env_name: 'SQ_CI_BUILD_ARGS',
             description: 'Additional args for project build',
             optional: true,
             type: String,
-            default_value: "-skipPackagePluginValidation -skipMacroValidation -allowProvisioningUpdates"
+            default_value: "-skipPackagePluginValidation -skipMacroValidation"
           ),
           FastlaneCore::ConfigItem.new(
             key: :should_clear_project,
-            env_name: 'SQ_CI_SHOULD_CLEAR_PROJECT',
             description: 'Should clear project before build',
             optional: true,
             type: Boolean,
             default_value: true
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :derived_data_path,
-            env_name: 'SQ_CI_DERIVED_DATA_PATH',
-            description: 'Path to derived data folder',
-            optional: true,
-            type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :skip_package_dependencies_resolution,
@@ -119,8 +130,16 @@ module Fastlane
             optional: true,
             type: Boolean,
             default_value: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :derived_data_path,
+            env_name: 'SQ_CI_DERIVED_DATA_PATH',
+            description: 'Path to derived data folder',
+            optional: true,
+            type: String
           )
-        ]
+        ] +
+          ::SqCi::IosApp::Options.options
       end
 
       def self.return_value

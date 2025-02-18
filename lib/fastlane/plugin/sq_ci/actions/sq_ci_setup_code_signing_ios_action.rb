@@ -1,18 +1,16 @@
 require 'fastlane/action'
 require_relative '../helper/sq_ci_helper'
+require_relative '../../../../sq_ci/keychain/options'
+require_relative '../../../../sq_ci/ios_app/options'
 
 module Fastlane
   module Actions
     class SqCiSetupCodeSigningIosAction < Action
       def self.run(params)
-        keychain_path = "~/Library/Keychains/#{params[:keychain_name]}-db"
-        other_action.unlock_keychain(
-          path: keychain_path,
-          password: params[:keychain_password]
-        )
+        other_action.sq_ci_prepare_keychain
 
         ENV['MATCH_PASSWORD'] = params[:certificates_password]
-        ENV['CER_KEYCHAIN_PATH'] = keychain_path
+
         other_action.sync_code_signing(
           type: params[:code_signing_type],
           git_url: params[:certificates_repo],
@@ -66,13 +64,6 @@ module Fastlane
             type: String
           ),
           FastlaneCore::ConfigItem.new(
-            key: :project_path,
-            env_name: 'SQ_CI_PROJECT_PATH',
-            description: 'Path to project',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
             key: :code_signing_type,
             env_name: 'SQ_CI_CODE_SIGNING_TYPE',
             description: 'Targets in project',
@@ -87,20 +78,6 @@ module Fastlane
             optional: true,
             type: String,
             default_value: 'iPhone Distribution'
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :keychain_name,
-            env_name: 'SQ_CI_KEYCHAIN_NAME',
-            description: 'Keychain name for storing certificates',
-            optional: false,
-            type: String
-          ),
-          FastlaneCore::ConfigItem.new(
-            key: :keychain_password,
-            env_name: 'SQ_CI_KEYCHAIN_PASSWORD',
-            description: 'Password for keychain for storing certificates',
-            optional: false,
-            type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :certificates_repo,
@@ -128,7 +105,9 @@ module Fastlane
             type: Boolean,
             default_value: true
           )
-        ]
+        ] +
+          ::SqCi::Keychain::Options.options +
+          ::SqCi::IosApp::Options.options
       end
 
       def self.return_value
